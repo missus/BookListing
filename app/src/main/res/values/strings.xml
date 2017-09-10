@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Book Listing</string>
+    <string name="search_hint">Search for</string>
+    <string name="no_search_term">Search field need to be filled.</string>
+    <string name="no_author">Unknown</string>
+    <string name="no_books">No books found.</string>
+    <string name="no_internet">No internet connection.</string>
+    <string name="search">Search</string>
+</resources>
