@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Book Listing</string>
+    <string name="app_name">My Books</string>
     <string name="search_hint">Search for</string>
     <string name="no_search_term">Search field need to be filled.</string>
     <string name="no_author">Unknown</string>

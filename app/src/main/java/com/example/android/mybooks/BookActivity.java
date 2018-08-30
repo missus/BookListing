@@ -1,4 +1,9 @@
-package com.example.android.booklisting;
+/*
+ * Created by Karolin Fornet.
+ * Copyright (c) 2017.  All rights reserved.
+ */
+
+package com.example.android.mybooks;
 
 import android.app.LoaderManager;
 import android.content.Context;
@@ -43,14 +48,13 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_activity);
 
-        mBookListView = (ListView) findViewById(R.id.list);
-        mEmptyStateTextView = (TextView) findViewById(R.id.empty);
+        mBookListView = findViewById(R.id.list);
+        mEmptyStateTextView = findViewById(R.id.empty);
         mBookListView.setEmptyView(mEmptyStateTextView);
         mAdapter = new BookAdapter(BookActivity.this, new ArrayList<Book>());
         mBookListView.setAdapter(mAdapter);
-        mSearchView = (EditText) findViewById(R.id.search_for);
-
-        mProgress = (ProgressBar) findViewById(R.id.loading_spinner);
+        mSearchView = findViewById(R.id.search_for);
+        mProgress = findViewById(R.id.loading_spinner);
         mProgress.setVisibility(View.GONE);
 
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -72,10 +76,8 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
             mEmptyStateTextView.setText(R.string.no_internet);
         }
 
-        Button searchButton = (Button) findViewById(R.id.search);
-        searchButton.setOnClickListener(new View.OnClickListener()
-
-        {
+        Button searchButton = findViewById(R.id.search);
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mSearchTerm = mSearchView.getText().toString();
@@ -102,9 +104,7 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
                 }
             }
         });
-        mBookListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-
-        {
+        mBookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Book currentBook = mAdapter.getItem(position);
@@ -113,7 +113,6 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(websiteIntent);
             }
         });
-
     }
 
     @Override
@@ -129,10 +128,9 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
-        ProgressBar progress = (ProgressBar) findViewById(R.id.loading_spinner);
+        ProgressBar progress = findViewById(R.id.loading_spinner);
         progress.setVisibility(View.GONE);
         mAdapter.clear();
-
         if (books != null && !books.isEmpty()) {
             mAdapter = new BookAdapter(BookActivity.this, books);
             mBookListView.setAdapter(mAdapter);
@@ -145,5 +143,4 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoaderReset(Loader<List<Book>> loader) {
         mAdapter.clear();
     }
-
 }

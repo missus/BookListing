@@ -1,4 +1,9 @@
-package com.example.android.booklisting;
+/*
+ * Created by Karolin Fornet.
+ * Copyright (c) 2017.  All rights reserved.
+ */
+
+package com.example.android.mybooks;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
@@ -29,19 +34,18 @@ public class BookAdapter extends ArrayAdapter<Book> {
         }
 
         Book currentBook = getItem(position);
-
-        TextView ratingView = (TextView) convertView.findViewById(R.id.rating);
+        TextView ratingView = convertView.findViewById(R.id.rating);
         ratingView.setText(formatRating(currentBook.getRating()));
         GradientDrawable ratingCircle = (GradientDrawable) ratingView.getBackground();
         ratingCircle.setColor(getRatingColor(currentBook.getRating()));
 
-        TextView authorView = (TextView) convertView.findViewById(R.id.author);
+        TextView authorView = convertView.findViewById(R.id.author);
         authorView.setText(currentBook.getAuthors());
 
-        TextView titleView = (TextView) convertView.findViewById(R.id.title);
+        TextView titleView = convertView.findViewById(R.id.title);
         titleView.setText(currentBook.getTitle());
 
-        TextView dateView = (TextView) convertView.findViewById(R.id.date);
+        TextView dateView = convertView.findViewById(R.id.date);
         dateView.setText(currentBook.getDate());
 
         return convertView;

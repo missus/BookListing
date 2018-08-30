@@ -1,6 +1,11 @@
-package com.example.android.booklisting;
+/*
+ * Created by Karolin Fornet.
+ * Copyright (c) 2017.  All rights reserved.
+ */
 
-import android.support.annotation.NonNull;
+package com.example.android.mybooks;
+
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -19,9 +24,17 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.android.booklisting.BookActivity.LOG_TAG;
+import static com.example.android.mybooks.BookActivity.LOG_TAG;
 
 public final class QueryUtils {
+
+    public static final String ITEMS = "items";
+    public static final String VOLUME_INFO = "volumeInfo";
+    public static final String AVERAGE_RATING = "averageRating";
+    public static final String TITLE = "title";
+    public static final String AUTHORS = "authors";
+    public static final String PUBLISHED_DATE = "publishedDate";
+    public static final String INFO_LINK = "infoLink";
 
     private QueryUtils() {
     }
@@ -41,7 +54,6 @@ public final class QueryUtils {
         if (url == null) {
             return jsonResponse;
         }
-
         HttpURLConnection urlConnection = null;
         InputStream inputStream = null;
         try {
@@ -84,51 +96,46 @@ public final class QueryUtils {
         return output.toString();
     }
 
-    private static List<Book> extractFeatureFromJson(String bookJSON) {
+    private static List<Book> extractFeatureFromJson(String bookJSON, Context context) {
         if (TextUtils.isEmpty(bookJSON)) {
             return null;
         }
-
         List<Book> books = new ArrayList<>();
         try {
             JSONObject baseJsonResponse = new JSONObject(bookJSON);
-            JSONArray bookArray = baseJsonResponse.getJSONArray("items");
+            JSONArray bookArray = baseJsonResponse.getJSONArray(ITEMS);
 
             for (int i = 0; i < bookArray.length(); i++) {
 
                 JSONObject currentBook = bookArray.getJSONObject(i);
+                JSONObject info = currentBook.getJSONObject(VOLUME_INFO);
+                double rating = info.has(AVERAGE_RATING) ? info.getDouble(AVERAGE_RATING) : 0;
 
-                JSONObject info = currentBook.getJSONObject("volumeInfo");
-
-                double rating = info.has("averageRating") ? info.getDouble("averageRating") : 0;
-
-                String title = info.getString("title");
+                String title = info.getString(TITLE);
                 List<String> authors = new ArrayList<>();
-                if (info.has("authors")) {
-                    JSONArray authorArray = info.getJSONArray("authors");
+                if (info.has(AUTHORS)) {
+                    JSONArray authorArray = info.getJSONArray(AUTHORS);
                     if (authorArray.length() > 0) {
                         for (int j = 0; j < authorArray.length(); j++) {
                             authors.add(authorArray.getString(j));
                         }
                     }
                 } else {
-                    authors.add("Unknown");
+                    authors.add(context.getResources().getString(R.string.no_author));
                 }
-                String date = info.has("publishedDate") ? info.getString("publishedDate") : "";
-
-                String url = info.has("infoLink") ? info.getString("infoLink") : "";
-
+                String date = info.has(PUBLISHED_DATE) ? info.getString(PUBLISHED_DATE) : "";
+                String url = info.has(INFO_LINK) ? info.getString(INFO_LINK) : "";
                 Book book = new Book(rating, title, date, url, authors);
                 books.add(book);
             }
 
         } catch (JSONException e) {
-            Log.e("QueryUtils", "Problem parsing the book JSON results", e);
+            Log.e(LOG_TAG, "Problem parsing the book JSON results", e);
         }
         return books;
     }
 
-    public static List<Book> fetchBookData(String requestUrl) {
+    public static List<Book> fetchBookData(String requestUrl, Context context) {
         URL url = createUrl(requestUrl);
         String jsonResponse = null;
         try {
@@ -136,7 +143,6 @@ public final class QueryUtils {
         } catch (IOException e) {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
-        List<Book> books = extractFeatureFromJson(jsonResponse);
-        return books;
+        return extractFeatureFromJson(jsonResponse, context);
     }
 }

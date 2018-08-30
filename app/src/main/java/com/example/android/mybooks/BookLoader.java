@@ -1,4 +1,9 @@
-package com.example.android.booklisting;
+/*
+ * Created by Karolin Fornet.
+ * Copyright (c) 2017.  All rights reserved.
+ */
+
+package com.example.android.mybooks;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
@@ -7,12 +12,12 @@ import java.util.List;
 
 public class BookLoader extends AsyncTaskLoader<List<Book>> {
 
-    private static final String LOG_TAG = BookLoader.class.getName();
-
     private final String mUrl;
+    private Context mContext;
 
     public BookLoader(Context context, String url) {
         super(context);
+        mContext=context;
         mUrl = url;
     }
 
@@ -26,8 +31,6 @@ public class BookLoader extends AsyncTaskLoader<List<Book>> {
         if (mUrl == null) {
             return null;
         }
-
-        List<Book> books = QueryUtils.fetchBookData(mUrl);
-        return books;
+        return QueryUtils.fetchBookData(mUrl, mContext);
     }
 }

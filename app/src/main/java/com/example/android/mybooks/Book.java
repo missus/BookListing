@@ -1,4 +1,9 @@
-package com.example.android.booklisting;
+/*
+ * Created by Karolin Fornet.
+ * Copyright (c) 2017.  All rights reserved.
+ */
+
+package com.example.android.mybooks;
 
 import java.util.List;
 
@@ -27,11 +32,11 @@ public class Book {
     }
 
     public String getAuthors() {
-        String authors = mAuthors.get(0);
+        StringBuilder authors = new StringBuilder(mAuthors.get(0));
         for (int i = 1; i < mAuthors.size(); i++) {
-            authors += ", " + mAuthors.get(i);
+            authors.append(", ").append(mAuthors.get(i));
         }
-        return authors;
+        return authors.toString();
     }
 
     public String getDate() {
